@@ -1,0 +1,155 @@
+# Particle Photon
+# ---------------------------------------
+photon.name=Particle Photon
+
+photon.upload.tool=fw_loader
+photon.upload.protocol=dfu
+photon.upload.vid=2b04
+photon.upload.pid=d006
+photon.upload.user_addr=0x80a0000
+
+photon.bootloader.tool=fw_loader
+photon.bootloader.protocol=dfu
+photon.bootloader.vid=2b04
+photon.bootloader.pid=d006
+photon.bootloader.part1_addr=0x8020000
+photon.bootloader.part2_addr=0x8060000
+photon.bootloader.part1_bin=system-part1-%SYSTEM_VERSION_STRING%-photon.bin
+photon.bootloader.part2_bin=system-part2-%SYSTEM_VERSION_STRING%-photon.bin
+
+photon.build.mcu=cortex-m3
+photon.build.f_cpu=120000000
+photon.build.board=PARTICLE_PHOTON
+photon.build.core=particle
+photon.build.variant=photon
+photon.build.system_version_string=%SYSTEM_VERSION_STRING%
+photon.build.module_dependency=4,2,%SYSTEM_PART2_MODULE_VERSION%
+photon.build.module_version=%USER_PART_MODULE_VERSION%
+photon.build.module_function=5
+photon.build.module_index=1
+photon.build.system_version=-DSYSTEM_VERSION_STRING={build.system_version_string} -DMODULE_DEPENDENCY={build.module_dependency} -DMODULE_VERSION={build.module_version} -DMODULE_FUNCTION={build.module_function} -DMODULE_INDEX={build.module_index}
+photon.build.extra_flags=-DSTM32_DEVICE -DSTM32F2XX -DPLATFORM_THREADING=1 -DPLATFORM_ID=6 -DPLATFORM_NAME=photon -DUSBD_VID_SPARK=0x2B04 -DUSBD_PID_DFU=0xD006 -DUSBD_PID_CDC=0xC006 -DPRODUCT_ID=6 -DPRODUCT_FIRMWARE_VERSION=65535 -DUSE_STDPERIPH_DRIVER -DDFU_BUILD_ENABLE -DRELEASE_BUILD -DSTART_DFU_FLASHER_SERIAL_SPEED=14400 -DSTART_YMODEM_FLASHER_SERIAL_SPEED=28800 -DSPARK_PLATFORM_NET=BCM9WCDUSI09 -fno-builtin-malloc -fno-builtin-free -fno-builtin-realloc  -DLOG_INCLUDE_SOURCE_INFO -DUSER_FIRMWARE_IMAGE_SIZE=0x20000 -DUSER_FIRMWARE_IMAGE_LOCATION=0x80A0000 -DMODULAR_FIRMWARE=1 -D_GNU_SOURCE -D_WINSOCK_H -DLOG_MODULE_CATEGORY=app {build.system_version}
+
+photon.build.includes=-I{build.core.path}/firmware/user/inc -I{build.core.path}/firmware/wiring/inc -I{build.core.path}/firmware/system/inc -I{build.core.path}/firmware/services/inc -I{build.core.path}/firmware/communication/src -I{build.core.path}/firmware/hal/inc -I{build.core.path}/firmware/hal/shared -I{build.core.path}/firmware/hal/src/photon -I{build.core.path}/firmware/hal/src/stm32f2xx -I{build.core.path}/firmware/hal/src/stm32 -I{build.core.path}/firmware/hal/src/photon/api -I{build.core.path}/firmware/platform/shared/inc -I{build.core.path}/firmware/platform/MCU/STM32F2xx/STM32_USB_Host_Driver/inc -I{build.core.path}/firmware/platform/MCU/STM32F2xx/STM32_USB_OTG_Driver/inc -I{build.core.path}/firmware/platform/MCU/STM32F2xx/STM32_StdPeriph_Driver/inc -I{build.core.path}/firmware/platform/MCU/STM32F2xx/STM32_USB_Device_Driver/inc -I{build.core.path}/firmware/platform/MCU/STM32F2xx/SPARK_Firmware_Driver/inc -I{build.core.path}/firmware/platform/MCU/shared/STM32/inc -I{build.core.path}/firmware/platform/MCU/STM32F2xx/CMSIS/Include -I{build.core.path}/firmware/platform/MCU/STM32F2xx/CMSIS/Device/ST/Include -I{build.core.path}/firmware/dynalib/inc -I{build.core.path}/firmware/modules/shared/stm32f2xx/inc -I{runtime.platform.path}/variants/shared/stm32f2xx/inc
+
+photon.build.linker_paths=-L{build.core.path}/firmware/build/arm/linker/stm32f2xx -L{build.core.path}/firmware/build/arm/linker
+photon.build.linker_script={build.core.path}/firmware/modules/photon/user-part/linker.ld
+photon.build.linker_flags=-L{build.variant.path}/lib -Wl,--whole-archive {build.variant.path}/lib/STM32F2xx_Peripheral_Libraries.a -Wl,--no-whole-archive -nostartfiles -Xlinker --gc-sections {build.linker_paths} -Wl,--whole-archive -lhal-dynalib -lservices-dynalib -lsystem-dynalib -lrt-dynalib -lwiring -lcommunication-dynalib -lplatform -lwiring_globals -Wl,--no-whole-archive -lnosys --specs=nano.specs -L{build.core.path}/firmware/modules/photon/system-part2 -L{build.core.path}/firmware/modules/photon/system-part1 -L{build.core.path}/firmware/modules/photon/user-part -T{build.linker_script} -Wl,--defsym,USER_FIRMWARE_IMAGE_SIZE=0x20000 -Wl,--defsym,USER_FIRMWARE_IMAGE_LOCATION=0x80A0000
+
+photon.build.extra_linker_flags=
+
+# Particle P1
+# ---------------------------------------
+P1.name=Particle P1
+
+P1.upload.tool=fw_loader
+P1.upload.protocol=dfu
+P1.upload.vid=2b04
+P1.upload.pid=d008
+P1.upload.user_addr=0x80a0000
+
+P1.bootloader.tool=fw_loader
+P1.bootloader.protocol=dfu
+P1.bootloader.vid=2b04
+P1.bootloader.pid=d008
+P1.bootloader.part1_addr=0x8020000
+P1.bootloader.part2_addr=0x8060000
+P1.bootloader.part1_bin=system-part1-%SYSTEM_VERSION_STRING%-p1.bin
+P1.bootloader.part2_bin=system-part2-%SYSTEM_VERSION_STRING%-p1.bin
+
+P1.build.mcu=cortex-m3
+P1.build.f_cpu=120000000
+P1.build.board=PARTICLE_P1
+P1.build.core=particle
+P1.build.variant=photon
+P1.build.system_version_string=%SYSTEM_VERSION_STRING%
+P1.build.module_dependency=4,2,%SYSTEM_PART2_MODULE_VERSION%
+P1.build.module_version=%USER_PART_MODULE_VERSION%
+P1.build.module_function=5
+P1.build.module_index=1
+P1.build.system_version=-DSYSTEM_VERSION_STRING={build.system_version_string} -DMODULE_DEPENDENCY={build.module_dependency} -DMODULE_VERSION={build.module_version} -DMODULE_FUNCTION={build.module_function} -DMODULE_INDEX={build.module_index}
+P1.build.extra_flags=-DSTM32_DEVICE -DSTM32F2XX -DFLASHEE_EEPROM -DPLATFORM_THREADING=1 -DPLATFORM_ID=8 -DPLATFORM_NAME=photon -DUSBD_VID_SPARK=0x2B04 -DUSBD_PID_DFU=0xD008 -DUSBD_PID_CDC=0xC008 -DPRODUCT_ID=8 -DPRODUCT_FIRMWARE_VERSION=65535 -DUSE_STDPERIPH_DRIVER -DDFU_BUILD_ENABLE -DRELEASE_BUILD -DSTART_DFU_FLASHER_SERIAL_SPEED=14400 -DSTART_YMODEM_FLASHER_SERIAL_SPEED=28800 -DSPARK_PLATFORM_NET=BCM9WCDUSI14 -fno-builtin-malloc -fno-builtin-free -fno-builtin-realloc  -DLOG_INCLUDE_SOURCE_INFO -DUSER_FIRMWARE_IMAGE_SIZE=0x20000 -DUSER_FIRMWARE_IMAGE_LOCATION=0x80A0000 -DMODULAR_FIRMWARE=1 -D_GNU_SOURCE -D_WINSOCK_H -DLOG_MODULE_CATEGORY=app {build.system_version}
+
+P1.build.includes=-I{build.core.path}/firmware/user/inc -I{build.core.path}/firmware/wiring/inc -I{build.core.path}/firmware/system/inc -I{build.core.path}/firmware/services/inc -I{build.core.path}/firmware/communication/src -I{build.core.path}/firmware/hal/inc -I{build.core.path}/firmware/hal/shared -I{build.core.path}/firmware/hal/src/photon -I{build.core.path}/firmware/hal/src/stm32f2xx -I{build.core.path}/firmware/hal/src/stm32 -I{build.core.path}/firmware/hal/src/photon/api -I{build.core.path}/firmware/platform/shared/inc -I{build.core.path}/firmware/platform/MCU/STM32F2xx/STM32_USB_Host_Driver/inc -I{build.core.path}/firmware/platform/MCU/STM32F2xx/STM32_USB_OTG_Driver/inc -I{build.core.path}/firmware/platform/MCU/STM32F2xx/STM32_StdPeriph_Driver/inc -I{build.core.path}/firmware/platform/MCU/STM32F2xx/STM32_USB_Device_Driver/inc -I{build.core.path}/firmware/platform/MCU/STM32F2xx/SPARK_Firmware_Driver/inc -I{build.core.path}/firmware/platform/MCU/shared/STM32/inc -I{build.core.path}/firmware/platform/MCU/STM32F2xx/CMSIS/Include -I{build.core.path}/firmware/platform/MCU/STM32F2xx/CMSIS/Device/ST/Include -I{build.core.path}/firmware/dynalib/inc -I{build.core.path}/firmware/modules/shared/stm32f2xx/inc -I{runtime.platform.path}/variants/shared/stm32f2xx/inc
+
+P1.build.linker_paths=-L{build.core.path}/firmware/build/arm/linker/stm32f2xx -L{build.core.path}/firmware/build/arm/linker
+P1.build.linker_script={build.core.path}/firmware/modules/photon/user-part/linker.ld
+P1.build.linker_flags=-L{build.variant.path}/lib -Wl,--whole-archive {build.variant.path}/lib/STM32F2xx_Peripheral_Libraries.a -Wl,--no-whole-archive -nostartfiles -Xlinker --gc-sections {build.linker_paths} -Wl,--whole-archive -lhal-dynalib -lservices-dynalib -lsystem-dynalib -lrt-dynalib -lwiring -lcommunication-dynalib -lplatform -lwiring_globals -Wl,--no-whole-archive -lnosys --specs=nano.specs -L{build.core.path}/firmware/modules/photon/system-part2 -L{build.core.path}/firmware/modules/photon/system-part1 -L{build.core.path}/firmware/modules/photon/user-part -T{build.linker_script} -Wl,--defsym,USER_FIRMWARE_IMAGE_SIZE=0x20000 -Wl,--defsym,USER_FIRMWARE_IMAGE_LOCATION=0x80A0000
+
+P1.build.extra_linker_flags=
+
+# Particle Electron
+# ---------------------------------------
+electron.name=Particle Electron
+
+electron.upload.tool=fw_loader
+electron.upload.protocol=dfu
+electron.upload.vid=2b04
+electron.upload.pid=d00a
+electron.upload.user_addr=0x8080000
+
+electron.bootloader.tool=fw_loader
+electron.bootloader.protocol=dfu
+electron.bootloader.vid=2b04
+electron.bootloader.pid=d00a
+electron.bootloader.part1_addr=0x8020000
+electron.bootloader.part2_addr=0x8040000
+electron.bootloader.part1_bin=system-part1-%SYSTEM_VERSION_STRING%-electron.bin
+electron.bootloader.part2_bin=system-part2-%SYSTEM_VERSION_STRING%-electron.bin
+
+electron.build.mcu=cortex-m3
+electron.build.f_cpu=120000000
+electron.build.board=PARTICLE_ELECTRON
+electron.build.core=particle
+electron.build.variant=electron
+electron.build.system_version_string=%SYSTEM_VERSION_STRING%
+electron.build.module_dependency=4,2,%SYSTEM_PART2_MODULE_VERSION%
+electron.build.module_version=%USER_PART_MODULE_VERSION%
+electron.build.module_function=5
+electron.build.module_index=1
+electron.build.system_version=-DSYSTEM_VERSION_STRING={build.system_version_string} -DMODULE_DEPENDENCY={build.module_dependency} -DMODULE_VERSION={build.module_version} -DMODULE_FUNCTION={build.module_function} -DMODULE_INDEX={build.module_index}
+electron.build.extra_flags=-DSTM32_DEVICE -DSTM32F2XX -DPLATFORM_THREADING=1 -DPLATFORM_ID=10 -DPLATFORM_NAME=electron -DUSBD_VID_SPARK=0x2B04 -DUSBD_PID_DFU=0xD00A -DUSBD_PID_CDC=0xC00A -DPRODUCT_ID=10 -DPRODUCT_FIRMWARE_VERSION=65535 -DUSE_STDPERIPH_DRIVER -DDFU_BUILD_ENABLE -DRELEASE_BUILD -DSTART_DFU_FLASHER_SERIAL_SPEED=14400 -DSTART_YMODEM_FLASHER_SERIAL_SPEED=28800 -DSPARK_PLATFORM_NET=UBLOXSARA -fno-builtin-malloc -fno-builtin-free -fno-builtin-realloc  -DLOG_INCLUDE_SOURCE_INFO -DUSER_FIRMWARE_IMAGE_SIZE=0x20000 -DUSER_FIRMWARE_IMAGE_LOCATION=0x8080000 -DMODULAR_FIRMWARE=1 -D_GNU_SOURCE -D_WINSOCK_H -DLOG_MODULE_CATEGORY=app {build.system_version}
+
+electron.build.includes=-I{build.core.path}/firmware/user/inc -I{build.core.path}/firmware/wiring/inc -I{build.core.path}/firmware/system/inc -I{build.core.path}/firmware/services/inc -I{build.core.path}/firmware/communication/src -I{build.core.path}/firmware/hal/inc -I{build.core.path}/firmware/hal/shared -I/rtos/FreeRTOSv8.2.2/FreeRTOS/Source/include -I/rtos/FreeRTOSv8.2.2/FreeRTOS/Source/portable/GCC/ARM_CM3 -I{build.core.path}/firmware/hal/src/electron -I{build.core.path}/firmware/hal/src/stm32f2xx -I{build.core.path}/firmware/hal/src/stm32 -I{build.core.path}/firmware/platform/shared/inc -I{build.core.path}/firmware/platform/MCU/STM32F2xx/CMSIS/Include -I{build.core.path}/firmware/platform/MCU/STM32F2xx/CMSIS/Device/ST/Include -I{build.core.path}/firmware/platform/MCU/STM32F2xx/SPARK_Firmware_Driver/inc -I{build.core.path}/firmware/platform/MCU/shared/STM32/inc -I{build.core.path}/firmware/platform/MCU/STM32F2xx/STM32_StdPeriph_Driver/inc -I{build.core.path}/firmware/platform/MCU/STM32F2xx/STM32_USB_Device_Driver/inc -I{build.core.path}/firmware/platform/MCU/STM32F2xx/STM32_USB_Host_Driver/inc -I{build.core.path}/firmware/platform/MCU/STM32F2xx/STM32_USB_OTG_Driver/inc -I{build.core.path}/firmware/dynalib/inc -I{build.core.path}/firmware/modules/shared/stm32f2xx/inc -I{runtime.platform.path}/variants/shared/stm32f2xx/inc
+
+electron.build.linker_paths=-L{build.core.path}/firmware/build/arm/linker/stm32f2xx -L{build.core.path}/firmware/build/arm/linker
+electron.build.linker_script={build.core.path}/firmware/modules/electron/user-part/linker.ld
+electron.build.linker_flags=-L{build.variant.path}/lib -Wl,--no-whole-archive -nostartfiles -Xlinker --gc-sections {build.linker_paths} -Wl,--whole-archive -lhal-dynalib -lservices-dynalib -lsystem-dynalib -lrt-dynalib -lwiring -lcommunication-dynalib -lplatform -lwiring_globals -Wl,--no-whole-archive -lnosys --specs=nano.specs -L{build.core.path}/firmware/modules/electron/system-part2 -L{build.core.path}/firmware/modules/electron/system-part1 -L{build.core.path}/firmware/modules/electron/user-part -T{build.linker_script} -Wl,--defsym,USER_FIRMWARE_IMAGE_SIZE=0x20000 -Wl,--defsym,USER_FIRMWARE_IMAGE_LOCATION=0x8080000
+
+electron.build.extra_linker_flags=
+
+# Particle Core
+# ---------------------------------------
+core.name=Particle Core
+
+core.upload.tool=fw_loader
+core.upload.protocol=dfu
+core.upload.vid=1d50
+core.upload.pid=607f
+core.upload.user_addr=0x8050000
+
+core.bootloader.tool=fw_loader
+core.bootloader.protocol=dfu
+core.bootloader.vid=1d50
+core.bootloader.pid=607f
+core.bootloader.part1_addr=0x8050000
+core.bootloader.part2_addr=
+core.bootloader.part1_bin=tinker-%SYSTEM_VERSION_STRING%-core.bin
+core.bootloader.part2_bin=
+
+core.build.mcu=cortex-m3
+core.build.f_cpu=72000000
+core.build.board=PARTICLE_CORE
+core.build.core=particle
+core.build.variant=core
+core.build.system_version_string=%SYSTEM_VERSION_STRING%
+core.build.system_version=-DSYSTEM_VERSION_STRING={build.system_version_string}
+core.build.extra_flags=-DSTM32_DEVICE -DSTM32F10X_MD -DPLATFORM_THREADING=0 -DPLATFORM_ID=0 -DPLATFORM_NAME=core -DUSBD_VID_SPARK=0x1D50 -DUSBD_PID_DFU=0x607F -DUSBD_PID_CDC=0x607D -DSPARK_PLATFORM -DFLASHEE_EEPROM -g3 -gdwarf-2 -Os -mcpu=cortex-m3 -mthumb -flto -DINCLUDE_PLATFORM=1 -DPRODUCT_ID=0 -DPRODUCT_FIRMWARE_VERSION=65535 -DUSE_STDPERIPH_DRIVER -DDFU_BUILD_ENABLE -DRELEASE_BUILD -DSTART_DFU_FLASHER_SERIAL_SPEED=14400 -DSTART_YMODEM_FLASHER_SERIAL_SPEED=28800 -DSPARK_PLATFORM_NET=CC3000 -fno-builtin-malloc -fno-builtin-free -fno-builtin-realloc  -DMODULE_VERSION=0 -DMODULE_FUNCTION=3 -DMODULE_DEPENDENCY=0,0,0 -D_POSIX_C_SOURCE=200809 {build.system_version} -D_GNU_SOURCE -D_WINSOCK_H
+
+core.build.includes=-I{build.core.path}/firmware/user/inc -I{build.core.path}/firmware/wiring/inc -I{build.core.path}/firmware/system/inc -I{build.core.path}/firmware/services/inc -I{build.core.path}/firmware/communication/src -I{build.core.path}/firmware/hal/inc -I{build.core.path}/firmware/hal/shared -I{build.core.path}/firmware/hal/src/core -I{build.core.path}/firmware/hal/src/stm32 -I{build.core.path}/firmware/platform/shared/inc -I{build.core.path}/firmware/platform/MCU/STM32F1xx/STM32_StdPeriph_Driver/inc -I{build.core.path}/firmware/platform/MCU/STM32F1xx/STM32_USB_Device_Driver/inc -I{build.core.path}/firmware/platform/MCU/STM32F1xx/SPARK_Firmware_Driver/inc -I{build.core.path}/firmware/platform/MCU/shared/STM32/inc -I{build.core.path}/firmware/platform/MCU/STM32F1xx/CMSIS/Include -I{build.core.path}/firmware/platform/MCU/STM32F1xx/CMSIS/Device/ST/Include -I{build.core.path}/firmware/platform/NET/CC3000/CC3000_Host_Driver -I{build.core.path}/firmware/dynalib/inc -I{runtime.platform.path}/variants/shared/startup
+
+core.build.linker_paths=-L{build.core.path}/firmware/build/arm/linker
+core.build.linker_script={build.core.path}/firmware/build/arm/linker/linker_stm32f10x_md_dfu.ld
+core.build.linker_flags=-nostartfiles -Xlinker --gc-sections -flto -Os -fuse-linker-plugin -T{build.linker_script}  {build.linker_paths}  --specs=nano.specs -lc -lnosys -u _printf_float -L{build.variant.path}/lib -Wl,--whole-archive -lnewlib_nano -lwiring -lhal -lsystem -lservices -lcommunication -lplatform -lwiring_globals -Wl,--no-whole-archive
+
+core.build.extra_linker_flags=

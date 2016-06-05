@@ -1,0 +1,69 @@
+{
+    "packages":
+    {
+        "name":"Particle",
+        "maintainer":"Particle",
+        "websiteURL":"http://particle.io",
+        "help":{ "online":"https://community.particle.io/" },
+        "platforms": 
+        [
+            {
+                "name": "Particle",
+                "architecture": "STM32F2",
+                "version": "0.5.1",
+                "category": "Particle",
+                "url": "https://github.com/avtolstoy/particle-arduino/releases/download/v0.5.1/particle_arduino_v0.5.1.tar.bz2",
+                "archiveFileName": "particle_arduino_v0.5.1.tar.bz2",
+                "checksum": "SHA-256:465a1d57963f4aeec3c88580015f5b1772ab031a6609a51bc0a53adb9fa2d9f0",
+                "size": "22904531",
+                "boards": {"name": "Particle"},
+                "toolsDependencies": 
+                [
+                    {
+                        "packager": "Particle",
+                        "name": "arm-none-eabi-gcc",
+                        "version": "4.9-2015-q3"
+                    }
+                ]
+            }
+        ],
+        "tools":
+        [
+            {
+                "name": "arm-none-eabi-gcc",
+                "version": "4.9-2015-q3",
+                "systems": 
+                [
+                    {
+                        "host": "i686-mingw32",
+                        "url": "https://github.com/avtolstoy/particle-arduino/releases/download/v0.5.1/gcc-arm-none-eabi-4_9-2015q3-20150921-win32.tar.bz2",
+                        "archiveFileName": "gcc-arm-none-eabi-4_9-2015q3-20150921-win32.tar.bz2",
+                        "checksum": "MD5:aef73c8af927427a7640ab20b5177d7d",
+                        "size": "82648992"
+                    },
+                    {
+                        "host": "x86_64-apple-darwin",
+                        "url": "https://launchpad.net/gcc-arm-embedded/4.9/4.9-2015-q3-update/+download/gcc-arm-none-eabi-4_9-2015q3-20150921-mac.tar.bz2",
+                        "archiveFileName": "gcc-arm-none-eabi-4_9-2015q3-20150921-mac.tar.bz2",
+                        "checksum": "MD5:7886163ba5a1c17b560939e3dcf1382b",
+                        "size": "77455989"
+                    },
+                    {
+                        "host": "x86_64-pc-linux-gnu",
+                        "url": "https://launchpad.net/gcc-arm-embedded/4.9/4.9-2015-q3-update/+download/gcc-arm-none-eabi-4_9-2015q3-20150921-linux.tar.bz2",
+                        "archiveFileName": "gcc-arm-none-eabi-4_9-2015q3-20150921-linux.tar.bz2",
+                        "checksum": "MD5:8a4a74872830f80c788c944877d3ad8c",
+                        "size": "73710332"
+                    },
+                    {
+                        "host": "i686-pc-linux-gnu",
+                        "url": "https://launchpad.net/gcc-arm-embedded/4.9/4.9-2015-q3-update/+download/gcc-arm-none-eabi-4_9-2015q3-20150921-linux.tar.bz2",
+                        "archiveFileName": "gcc-arm-none-eabi-4_9-2015q3-20150921-linux.tar.bz2",
+                        "checksum": "MD5:8a4a74872830f80c788c944877d3ad8c",
+                        "size": "73710332"
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,37 @@
+#!/bin/bash
+
+#
+# Firmware loader
+#
+
+PORT="$1"
+SWITCHER="$2"
+DFU_UTIL="$3"
+VID="$4"
+PID="$5"
+
+# Try to enter DFU
+"${SWITCHER}" 14400 ${PORT} || true
+
+sleep 3
+
+IMAGES=$#
+FWDIR=""
+
+if (( ($# - 5) % 2 != 0 )); then
+    IMAGES=$(($# - 1))
+    FWDIR="${@:$#:1}"
+fi
+
+for ((i=6 ; i <= ${IMAGES} ; i+=2))
+do
+    ADDR="${@:$i:1}"
+    IMAGE="${@:$(($i + 1)):1}"
+    LEAVE=""
+    if (( ($i + 2) >= $# )); then
+        LEAVE=":leave"
+    fi
+    "${DFU_UTIL}" -d ${VID}:${PID} -a 0 -s "${ADDR}${LEAVE}" -D "${FWDIR}${IMAGE}"
+done
+
+exit 0

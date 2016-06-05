@@ -1,0 +1,6 @@
+dfu_util.name=Particle DFU
+dfu_util.name.communication=USB
+dfu_util.name.protocol=
+dfu_util.name.program.protocol=
+dfu_util.program.tool=fw_loader
+dfu_util.program.extra_params=

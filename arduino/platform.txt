@@ -1,0 +1,113 @@
+
+# Particle compile variables
+# ------------------------- 
+
+name=Particle
+
+# Compile tool path
+compiler.path={runtime.tools.arm-none-eabi-gcc-4.9-2015-q3.path}/bin/
+
+# Compile s files options
+compiler.s.cmd=arm-none-eabi-gcc
+# build/arm-tools.mk build/modules-defaults.mk
+compiler.s.flags=-c -g3 -gdwarf-2 -mcpu=cortex-m3 -x assembler-with-cpp -mthumb -fmessage-length=0
+
+# Compiler common flags
+# build/arm-tools.mk
+compiler.common.cflags=-g3 -gdwarf-2 -Os -mcpu=cortex-m3 -mthumb
+compiler.common.cppflags=-fno-exceptions -fno-rtti -fcheck-new
+# build/module-defaults.mk
+compiler.common.modcflags=-ffunction-sections -fdata-sections -Wall -Wno-switch -Wno-error=deprecated-declarations -fmessage-length=0 -fno-strict-aliasing -DSPARK=1 -DPARTICLE=1 -DSPARK_PLATFORM
+
+# Compile c files options
+compiler.c.cmd=arm-none-eabi-gcc
+compiler.c.flags=-c -std=gnu99 {compiler.common.cflags} {compiler.common.modcflags}
+
+# Compile cpp files options
+compiler.cpp.cmd=arm-none-eabi-g++
+compiler.cpp.flags=-c -std=gnu++11 {compiler.common.cflags} {compiler.common.cppflags} {compiler.common.modcflags}
+
+# Create archives options
+compiler.ar.cmd=arm-none-eabi-ar
+compiler.ar.flags=rcs
+
+# Combine to create elf file options
+compiler.c.elf.cmd=arm-none-eabi-g++
+compiler.c.elf.flags=-Os -Wl,--gc-sections  
+
+# Create bin file options
+compiler.elf2bin.cmd=arm-none-eabi-objcopy
+compiler.elf2bin.flags=-O binary
+
+# Create hex file options
+compiler.elf2hex.cmd=arm-none-eabi-objcopy
+compiler.elf2hex.flags1=-O ihex
+compiler.elf2hex.flags2=-O ihex -I binary 
+
+# Calculate hex size options
+compiler.size.cmd=arm-none-eabi-size
+
+# Particle compile patterns
+# ------------------------
+
+## Compile S files
+recipe.s.o.pattern="{compiler.path}{compiler.s.cmd}" {compiler.s.flags} {build.includes} {includes} "{source_file}" -o "{object_file}"
+recipe.S.o.pattern="{compiler.path}{compiler.s.cmd}" {compiler.s.flags} {build.includes} {includes} "{source_file}" -o "{object_file}"
+
+## Compile c files
+recipe.c.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.c.flags} -mcpu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} {build.extra_flags} {build.includes} {includes} "{source_file}" -o "{object_file}"
+
+## Compile c++ files
+recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} -mcpu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} {build.extra_flags} {build.includes} {includes} "{source_file}" -o "{object_file}"
+
+## Create archives
+recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} "{build.path}/libcore.a" "{object_file}"
+
+## Combine gc-sections, archives, and objects
+recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} {compiler.common.cflags} {compiler.common.modcflags} -mcpu={build.mcu} -Werror {build.extra_flags} {build.includes} -MMD -MP -MF "{build.path}/{build.project_name}.elf.d" {build.extra_linker_flags} {object_files} --output "{build.path}/{build.project_name}.elf" {build.linker_flags}
+
+## Create bin
+recipe.objcopy.eep.pattern="{compiler.path}{compiler.elf2bin.cmd}" {compiler.elf2bin.flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.bin"
+
+## Create hex
+#recipe.objcopy.hex1.pattern="{compiler.path}{compiler.elf2hex.cmd}" {compiler.elf2hex.flags1} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}_raw.hex"  
+#recipe.objcopy.hex2.pattern="{compiler.path}{compiler.elf2hex.cmd}" {compiler.elf2hex.flags2} "{build.path}/{build.project_name}.bin" "{build.path}/{build.project_name}.hex" 
+
+## Add CRC32
+recipe.hooks.postbuild.0.pattern={runtime.platform.path}/tools/crc32/{runtime.os}/sh {runtime.platform.path}/tools/crc32/{runtime.os}/crc32.sh "{build.path}/{build.project_name}.bin" {runtime.platform.path}/tools/crc32/{runtime.os} {compiler.path}
+
+## Save hex
+recipe.output.tmp_file={build.project_name}.bin
+recipe.output.save_file={build.project_name}.bin 
+
+## Compute size
+recipe.size.pattern="{compiler.path}{compiler.size.cmd}" -A "{build.path}/{build.project_name}.elf"
+recipe.size.regex=\.text\s+([0-9]+).*
+
+## Preprocessor
+preproc.includes.flags=-w -x c++ -M -MG -MP
+recipe.preproc.includes="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} {preproc.includes.flags} -mcpu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} {build.extra_flags} {build.includes} {includes} "{source_file}"
+
+preproc.macros.flags=-w -x c++ -E -CC
+recipe.preproc.macros="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} {preproc.macros.flags} -mcpu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} {build.extra_flags} {build.includes} {includes} "{source_file}" -o "{preprocessed_file_path}"
+
+# Upload tools
+
+tools.fw_loader.cmd.path={runtime.platform.path}/tools/fw_loader/{runtime.os}/fw-load
+
+tools.fw_loader.upload.params.verbose=
+tools.fw_loader.upload.params.quiet=
+tools.fw_loader.upload.pattern="{cmd.path}" "{serial.port}" "{runtime.platform.path}/tools/fw_loader/{runtime.os}/serial_switcher" "{runtime.platform.path}/tools/fw_loader/{runtime.os}/dfu-util" "{upload.vid}" "{upload.pid}" "{upload.user_addr}" "{build.path}/{build.project_name}.bin"
+
+tools.fw_loader.upload.pattern.windows="{runtime.platform.path}/tools/crc32/{runtime.os}/bash" "{cmd.path}" "{serial.port}" "{runtime.platform.path}/tools/fw_loader/{runtime.os}/serial_switcher" "{runtime.platform.path}/tools/fw_loader/{runtime.os}/dfu-util" "{upload.vid}" "{upload.pid}" "{upload.user_addr}" "{build.path}/{build.project_name}.bin"
+
+
+tools.fw_loader.bootloader.params.verbose=
+tools.fw_loader.bootloader.params.quiet=
+tools.fw_loader.bootloader.pattern="{cmd.path}" "{serial.port}" "{runtime.platform.path}/tools/fw_loader/{runtime.os}/serial_switcher" "{runtime.platform.path}/tools/fw_loader/{runtime.os}/dfu-util" "{bootloader.vid}" "{bootloader.pid}" "{bootloader.part1_addr}" "{bootloader.part1_bin}" "{bootloader.part2_addr}" "{bootloader.part2_bin}" "{runtime.platform.path}/firmwares/"
+
+tools.fw_loader.bootloader.pattern.windows="{runtime.platform.path}/tools/crc32/{runtime.os}/bash" "{cmd.path}" "{serial.port}" "{runtime.platform.path}/tools/fw_loader/{runtime.os}/serial_switcher" "{runtime.platform.path}/tools/fw_loader/{runtime.os}/dfu-util" "{bootloader.vid}" "{bootloader.pid}" "{bootloader.part1_addr}" "{bootloader.part1_bin}" "{bootloader.part2_addr}" "{bootloader.part2_bin}" "{runtime.platform.path}/firmwares/"
+
+tools.fw_loader.erase.params.verbose=
+tools.fw_loader.erase.params.quiet=
+tools.fw_loader.erase.pattern=
